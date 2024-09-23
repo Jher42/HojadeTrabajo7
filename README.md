@@ -69,6 +69,3 @@ Incluye ejemplos de solicitudes y respuestas.
 2. **GET /users** - Listar usuarios.
 3. **PUT /users/:dpi** - Actualizar usuario.
 4. **DELETE /users/:dpi** - Eliminar usuario.
-
-## Contribuciones
-Si deseas contribuir, por favor realiza un **pull request** con tus sugerencias o mejoras.
