@@ -2,15 +2,13 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 
-let users = []; // Arreglo para almacenar los usuarios
-
-// POST /users - Crear un nuevo usuario
+let users = []; 
 app.post('/users', (req, res) => {
     const { name, email, password, dpi } = req.body;
 
     const userExists = users.find(user => user.dpi === dpi);
     if (userExists) {
-        return res.status(400).json({ message: 'El DPI ya está registrado' });
+        return res.status(400).json({ message: 'El DPI ya estÃ¡ registrado' });
     }
 
     const newUser = { name, email, password, dpi };
@@ -18,12 +16,10 @@ app.post('/users', (req, res) => {
     res.status(201).json(newUser);
 });
 
-// GET /users - Listar todos los usuarios
 app.get('/users', (req, res) => {
     res.json(users);
 });
 
-// PUT /users/:dpi - Actualizar un usuario existente
 app.put('/users/:dpi', (req, res) => {
     const { dpi } = req.params;
     const { name, email, password } = req.body;
@@ -33,11 +29,11 @@ app.put('/users/:dpi', (req, res) => {
         return res.status(404).json({ message: 'Usuario no encontrado' });
     }
 
-    // Si se intenta cambiar el DPI, verificar que no esté registrado
+    // Si se intenta cambiar el DPI, verificar que no estÃ© registrado
     if (req.body.dpi && req.body.dpi !== dpi) {
         const dpiExists = users.find(user => user.dpi === req.body.dpi);
         if (dpiExists) {
-            return res.status(400).json({ message: 'El nuevo DPI ya está registrado' });
+            return res.status(400).json({ message: 'El nuevo DPI ya estÃ¡ registrado' });
         }
         users[userIndex].dpi = req.body.dpi;
     }
@@ -46,7 +42,6 @@ app.put('/users/:dpi', (req, res) => {
     res.json(users[userIndex]);
 });
 
-// DELETE /users/:dpi - Eliminar un usuario
 app.delete('/users/:dpi', (req, res) => {
     const { dpi } = req.params;
     const userIndex = users.findIndex(user => user.dpi === dpi);
@@ -56,10 +51,9 @@ app.delete('/users/:dpi', (req, res) => {
     }
 
     users.splice(userIndex, 1);
-    res.status(204).send(); // No content
+    res.status(204).send(); 
 });
 
-// Configurar el puerto
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`);
