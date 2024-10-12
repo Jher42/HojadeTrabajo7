@@ -1,4 +1,3 @@
-Aquí tienes el contenido completo del README en un solo bloque, listo para que lo copies y pegues en tu archivo `README.md`:
 
 # API de Gestión de Usuarios
 
@@ -103,8 +102,4 @@ Incluye ejemplos de solicitudes y respuestas:
 4. **DELETE /users/:dpi** - Eliminar usuario.
 ```
 
-### Instrucciones:
-- Simplemente copia todo el texto anterior y pégalo en un archivo llamado **`README.md`** en la raíz de tu proyecto.
-- Asegúrate de ajustar cualquier dato específico que quieras incluir antes de guardarlo y subirlo a tu repositorio en GitHub.
 
-Si necesitas más cambios o algo más específico, ¡hazmelo saber!
