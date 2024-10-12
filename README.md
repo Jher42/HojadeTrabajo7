@@ -1,8 +1,7 @@
-Aquí tienes el contenido completo del README en un solo bloque, listo para que lo copies y pegues en tu archivo `README.md`:
 
-# API de Gestión de Usuarios
+# API de Gestión de Usuarios - Refactorización con TypeScript
 
-Esta API permite crear, listar, actualizar y eliminar usuarios. Está desarrollada con **Node.js** y **Express** y utiliza **JSON Web Tokens (JWT)** para la autenticación.
+Esta API permite crear, listar, actualizar y eliminar usuarios. Está desarrollada con **Node.js**, **Express**, **TypeScript** y utiliza **JSON Web Tokens (JWT)** para la autenticación. Esta versión ha sido refactorizada para agregar validaciones de tipos mediante TypeScript.
 
 ## Requerimientos
 
@@ -13,13 +12,13 @@ Esta API permite crear, listar, actualizar y eliminar usuarios. Está desarrolla
 
 1. Clona el repositorio:
    ```bash
-   git clone https://github.com/Jher42/HojadeTrabajo6
+   git clone https://github.com/Jher42/HojadeTrabajo7.git
    ```
 2. Navega a la carpeta del proyecto:
    ```bash
-   cd HojadeTrabajo6
+   cd HojadeTrabajo7
    ```
-3. Ejecuta el siguiente comando para instalar las dependencias:
+3. Instala las dependencias:
    ```bash
    npm install
    ```
@@ -33,13 +32,26 @@ JWT_EXPIRES_IN=30s
 PORT=3000
 ```
 
-## Ejecutar la API
+## Compilación y Ejecución
 
-- Para ejecutar en modo desarrollo (con recarga automática):
+### Compilar TypeScript
+1. Para compilar el proyecto, usa el siguiente comando:
+   ```bash
+   npm run build
+   ```
+
+2. Para ejecutar la API, primero compila el código y luego ejecuta:
+   ```bash
+   npm start
+   ```
+
+### Desarrollo
+- Para ejecutar el proyecto en modo desarrollo (con recarga automática):
    ```bash
    npm run dev
    ```
 
+### Modo producción
 - Para ejecutar en modo producción:
    ```bash
    npm start
@@ -49,6 +61,7 @@ PORT=3000
 
 ### **POST /users**
 - **Descripción**: Crea un nuevo usuario.
+- **Validación**: El cuerpo de la solicitud debe cumplir con la interfaz `User` (name, email, password, dpi).
 - **Ejemplo de solicitud**:
    ```json
    {
@@ -69,6 +82,7 @@ PORT=3000
 
 ### **PUT /users/:dpi**
 - **Descripción**: Actualiza un usuario existente.
+- **Validación**: El cuerpo de la solicitud debe cumplir con la interfaz `User`.
 - **Ejemplo de solicitud**:
    ```json
    {
@@ -88,6 +102,10 @@ PORT=3000
    - **204 No Content**: Si el usuario fue eliminado exitosamente.
    - **404 Not Found**: Si no se encuentra un usuario con el DPI proporcionado.
 
+## Migración del Sistema de Autenticación JWT
+
+La autenticación con JWT ha sido adaptada para utilizar TypeScript. El token JWT se valida correctamente con las interfaces definidas.
+
 ## Despliegue en Render
 
 La API está desplegada en Render y es accesible en la siguiente URL:
@@ -95,16 +113,13 @@ La API está desplegada en Render y es accesible en la siguiente URL:
 
 ## Documentación de la API
 
-Incluye ejemplos de solicitudes y respuestas:
-
 1. **POST /users** - Crear usuario.
 2. **GET /users** - Listar usuarios.
 3. **PUT /users/:dpi** - Actualizar usuario.
 4. **DELETE /users/:dpi** - Eliminar usuario.
-```
 
-### Instrucciones:
-- Simplemente copia todo el texto anterior y pégalo en un archivo llamado **`README.md`** en la raíz de tu proyecto.
-- Asegúrate de ajustar cualquier dato específico que quieras incluir antes de guardarlo y subirlo a tu repositorio en GitHub.
+## Instrucciones para ejecutar la API localmente
 
-Si necesitas más cambios o algo más específico, ¡hazmelo saber!
+1. Clonar el repositorio.
+2. Configurar las variables de entorno como se especifica.
+3. Ejecutar `npm run build` y luego `npm start` para levantar el servidor.
