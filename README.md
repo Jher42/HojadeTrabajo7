@@ -109,8 +109,7 @@ La autenticación con JWT ha sido adaptada para utilizar TypeScript. El token JW
 ## Despliegue en Render
 
 La API está desplegada en Render y es accesible en la siguiente URL:
-- [https://hojadetrabajo7-jvu3.onrender.com/](https://hojadetrabajo7-jvu3.onrender.com/)
-
+https://hojadetrabajo8.onrender.com
 ## Documentación de la API
 
 1. **POST /users** - Crear usuario.
