@@ -1,81 +1,86 @@
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
+import express, { Request, Response } from 'express';
+import { User } from './types/user'; 
 
-dotenv.config();
 const app = express();
-app.use(express.json());
+const port = process.env.PORT || 3000;
 
-let users = [];
+app.use(express.json()); 
 
-// Endpoint para crear un usuario con contraseña encriptada
-app.post('/users', async (req, res) => {
-    const { name, email, password, dpi } = req.body;
+let users: User[] = []; 
 
-    const userExists = users.find(user => user.dpi === dpi);
+
+app.get('/', (req: Request, res: Response) => {
+    res.send('Bienvenido a la API de gestión de usuarios');
+});
+
+
+app.post('/users', (req: Request, res: Response) => {
+    const { dpi, name, email, password }: User = req.body;
+
+
+    const userExists = users.some(user => user.dpi === dpi);
     if (userExists) {
-        return res.status(400).json({ message: 'El DPI ya está registrado' });
+        res.status(400).json({ message: 'El DPI ya está registrado' });
+        return;
     }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = { name, email, password: hashedPassword, dpi };
+   
+    const newUser: User = { dpi, name, email, password };
     users.push(newUser);
-    res.status(201).json(newUser);
+
+    res.status(201).json({ message: 'Usuario creado exitosamente', user: newUser });
 });
 
-// Endpoint de login que genera el token JWT
-app.post('/login', (req, res) => {
-    const { email, password } = req.body;
 
-    const user = users.find(u => u.email === email);
-    if (!user) {
-        return res.status(400).json({ message: 'Usuario no encontrado' });
+app.get('/users', (req: Request, res: Response) => {
+    res.status(200).json(users);
+});
+
+app.put('/users/:dpi', (req: Request, res: Response) => {
+    const { dpi } = req.params;
+    const { name, email, password, newDpi }: Partial<User> = req.body;
+
+    const userIndex = users.findIndex(user => user.dpi === dpi);
+
+  
+    if (userIndex === -1) {
+        res.status(404).json({ message: 'Usuario no encontrado' });
+        return;
     }
 
-    const validPassword = bcrypt.compareSync(password, user.password);
-    if (!validPassword) {
-        return res.status(400).json({ message: 'Contraseña incorrecta' });
+   
+    if (newDpi && newDpi !== dpi) {
+        const dpiExists = users.some(user => user.dpi === newDpi);
+        if (dpiExists) {
+             res.status(400).json({ message: 'El nuevo DPI ya está registrado' });
+             return
+        }
+        users[userIndex].dpi = newDpi;
     }
 
-    // Generar el token JWT
-    const token = jwt.sign({ id: user.dpi }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES_IN
-    });
+   
+    if (name !== undefined) users[userIndex].name = name;
+    if (email !== undefined) users[userIndex].email = email;
+    if (password !== undefined) users[userIndex].password = password;
 
-    res.json({ token });
+    res.status(200).json({ message: 'Usuario actualizado', user: users[userIndex] });
 });
 
-// Middleware para verificar el token JWT
-const verifyToken = (req, res, next) => {
-    const token = req.headers['authorization'];
-    if (!token) {
-        return res.status(403).json({ message: 'Token requerido' });
+
+app.delete('/users/:dpi', (req: Request, res: Response) => {
+    const { dpi } = req.params;
+
+    const userIndex = users.findIndex(user => user.dpi === dpi);
+
+ 
+    if (userIndex === -1) {
+         res.status(404).json({ message: 'Usuario no encontrado' });
+         return
     }
 
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.userId = decoded.id;
-        next();
-    } catch (error) {
-        return res.status(401).json({ message: 'Token inválido' });
-    }
-};
-
-// Proteger rutas con el middleware verifyToken
-app.get('/users', verifyToken, (req, res) => {
-    res.json(users);
+    users.splice(userIndex, 1);
+    res.status(200).json({ message: 'Usuario eliminado exitosamente' });
 });
 
-app.put('/users/:dpi', verifyToken, (req, res) => {
-    // Lógica para actualizar un usuario...
-});
-
-app.delete('/users/:dpi', verifyToken, (req, res) => {
-    // Lógica para eliminar un usuario...
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en el puerto ${PORT}`);
+app.listen(port, () => {
+    console.log(Servidor escuchando en http://localhost:${port});
 });
